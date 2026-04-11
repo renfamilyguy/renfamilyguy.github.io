@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ren.familyguy — Ovi Ren's playground for experiments and side projects">
+  <title>ren.familyguy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0e17;
+      --panel: #16141f;
+      --fg: #eeeaf4;
+      --dim: #6b6580;
+      --border: #2a2638;
+      --accent: #ff6b9d;
+      --accent2: #7ee8fa;
+      --accent3: #ffe156;
+      --shadow: #ff6b9d44;
+    }
+
+    [data-theme="light"] {
+      --bg: #fdf6ff;
+      --panel: #ffffff;
+      --fg: #1a1128;
+      --dim: #9b91aa;
+      --border: #e8dff2;
+      --accent: #e8357a;
+      --accent2: #0099bb;
+      --accent3: #d4a800;
+      --shadow: #e8357a33;
+    }
+
+    html { background: var(--bg); transition: background 0.3s; }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      transition: background 0.3s, color 0.3s;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main {
+      width: 100%;
+      max-width: 460px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .site-id {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 900;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: var(--dim);
+    }
+
+    .site-id em { color: var(--accent); font-style: normal; }
+
+    .theme-btn {
+      background: var(--panel);
+      border: 2px solid var(--border);
+      border-radius: 2px;
+      color: var(--dim);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 10px var(--shadow);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 2.5px solid var(--fg);
+      border-radius: 2px;
+      padding: 1.5rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      box-shadow: 4px 4px 0px var(--fg);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--fg);
+    }
+
+    .card-tag {
+      position: absolute;
+      top: -1px;
+      right: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 0 0 3px 3px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 2px;
+      border: 2.5px solid var(--fg);
+      display: block;
+    }
+
+    .avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 2px;
+      background: repeating-conic-gradient(var(--accent) 0deg 2deg, transparent 2deg 12deg);
+      opacity: 0.18;
+      z-index: -1;
+    }
+
+    .profile-text h1 {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--fg);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+
+    .handle {
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin-top: 0.3rem;
+    }
+
+    .handle a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
+      transition: color 0.15s;
+    }
+
+    .handle a:hover { color: var(--accent); }
+
+    .tags {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.5rem;
+      border: 1.5px solid currentColor;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .tag-pink  { color: var(--accent); }
+    .tag-cyan  { color: var(--accent2); }
+    .tag-yellow{ color: var(--accent3); }
+
+    .bio-card {
+      background: var(--panel);
+      border: 2.5px solid var(--fg);
+      border-radius: 2px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      box-shadow: 4px 4px 0px var(--fg);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .bio-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--fg);
+    }
+
+    .bio-card::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 28px;
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 10px solid var(--fg);
+    }
+
+    .bio-card::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 30px;
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 8px solid var(--panel);
+      z-index: 1;
+    }
+
+    .bio {
+      font-size: 0.82rem;
+      color: var(--dim);
+      line-height: 1.85;
+    }
+
+    .bio strong { color: var(--fg); font-weight: 500; }
+
+    .section-label {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.5rem;
+      padding-left: 0.2rem;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      background: var(--panel);
+      border: 2px solid var(--border);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--fg);
+      font-size: 0.82rem;
+      transition: all 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.18s;
+      transform-origin: bottom;
+    }
+
+    .link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 3px 3px 0 var(--accent);
+      transform: translate(-1px, -1px);
+    }
+
+    .link:hover::before { transform: scaleY(1); }
+
+    .link-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .link svg { opacity: 0.35; flex-shrink: 0; transition: opacity 0.18s; }
+    .link:hover svg { opacity: 1; }
+
+    .link-arrow {
+      color: var(--dim);
+      font-size: 0.75rem;
+      transition: transform 0.18s, color 0.18s;
+    }
+
+    .link:hover .link-arrow {
+      transform: translate(2px, -2px);
+      color: var(--accent);
+    }
+
+    footer {
+      font-size: 0.65rem;
+      color: var(--dim);
+      text-align: center;
+      letter-spacing: 0.08em;
+    }
+
+    footer span { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+
+    <div class="top-bar">
+      <p class="site-id">~ <em>ren.familyguy</em></p>
+      <button class="theme-btn" id="themeBtn">○ light</button>
+    </div>
+
+    <div class="card">
+      <div class="profile">
+        <div class="avatar-wrap">
+          <img class="avatar" src="https://github.com/renfamilyguy.png" alt="Ovi Ren" loading="lazy">
+        </div>
+        <div class="profile-text">
+          <h1>Ovi Ren</h1>
+          <p class="handle">aka <a href="https://github.com/iamovi" target="_blank" rel="noopener">@iamovi</a></p>
+          <div class="tags">
+            <span class="tag tag-pink">dev</span>
+            <span class="tag tag-cyan">builder</span>
+            <span class="tag tag-yellow">chaos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <p class="bio">
+        Experiments, side projects, and bad ideas. I break things,
+        fix them <strong>(sometimes)</strong>, and see what happens.
+        If it works, cool. If it doesn't — <strong>even cooler</strong>.
+      </p>
+    </div>
+
+    <p class="section-label">— links —</p>
+    <nav class="links">
+      <a class="link" href="https://github.com/iamovi" target="_blank" rel="noopener">
+        <span class="link-label">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          main account
+        </span>
+        <span class="link-arrow">↗</span>
+      </a>
+
+      <a class="link" href="https://github.com/renfamilyguy" target="_blank" rel="noopener">
+        <span class="link-label">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          playground
+        </span>
+        <span class="link-arrow">↗</span>
+      </a>
+
+      <a class="link" href="https://iamovi.github.io" target="_blank" rel="noopener">
+        <span class="link-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.42-3.58-8-8-8z"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          portfolio
+        </span>
+        <span class="link-arrow">↗</span>
+      </a>
+    </nav>
+
+
+
+  </main>
+
+  <script>
+    const btn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '○ light' : '● dark';
+
+    btn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.textContent = next === 'dark' ? '○ light' : '● dark';
+    });
+  </script>
+</body>
+</html>
