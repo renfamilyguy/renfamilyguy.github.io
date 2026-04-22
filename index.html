@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -6,32 +7,34 @@
   <meta name="description" content="ren.familyguy — Ovi Ren's playground for experiments and side projects">
   <title>ren.familyguy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0f0e17;
-      --panel: #16141f;
-      --fg: #eeeaf4;
-      --dim: #6b6580;
-      --border: #2a2638;
-      --accent: #ff6b9d;
-      --accent2: #7ee8fa;
-      --accent3: #ffe156;
-      --shadow: #ff6b9d44;
+      --bg: #0a0a0a;
+      --panel: #111111;
+      --fg: #f0f0f0;
+      --dim: #888888;
+      --border: #333333;
+      --ink: #f0f0f0;
+      --ink-dark: #0a0a0a;
+      --shadow: #f0f0f0;
+      --halftone: rgba(240,240,240,0.04);
+      --speed-line: rgba(240,240,240,0.06);
     }
 
     [data-theme="light"] {
-      --bg: #fdf6ff;
+      --bg: #f5f0e8;
       --panel: #ffffff;
-      --fg: #1a1128;
-      --dim: #9b91aa;
-      --border: #e8dff2;
-      --accent: #e8357a;
-      --accent2: #0099bb;
-      --accent3: #d4a800;
-      --shadow: #e8357a33;
+      --fg: #0a0a0a;
+      --dim: #555555;
+      --border: #cccccc;
+      --ink: #0a0a0a;
+      --ink-dark: #f5f0e8;
+      --shadow: #0a0a0a;
+      --halftone: rgba(0,0,0,0.04);
+      --speed-line: rgba(0,0,0,0.06);
     }
 
     html { background: var(--bg); transition: background 0.3s; }
@@ -50,13 +53,40 @@
       overflow-x: hidden;
     }
 
+    /* Manga halftone dot background */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
-      background-size: 20px 20px;
-      opacity: 0.5;
+      background-image: radial-gradient(circle, var(--fg) 1px, transparent 1px);
+      background-size: 18px 18px;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Speed lines overlay in corner */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg 8deg,
+        var(--speed-line) 8deg 9deg,
+        transparent 9deg 18deg,
+        var(--speed-line) 18deg 19deg,
+        transparent 19deg 28deg,
+        var(--speed-line) 28deg 29deg,
+        transparent 29deg 36deg,
+        var(--speed-line) 36deg 37deg,
+        transparent 37deg 44deg,
+        var(--speed-line) 44deg 45deg,
+        transparent 45deg 360deg
+      );
       pointer-events: none;
       z-index: 0;
     }
@@ -68,6 +98,22 @@
       z-index: 1;
     }
 
+    /* Panel border decoration - manga panel style */
+    .manga-panel-top {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .manga-panel-top span {
+      height: 4px;
+      background: var(--fg);
+      flex: 1;
+    }
+
+    .manga-panel-top span:nth-child(2) { flex: 3; }
+    .manga-panel-top span:nth-child(4) { flex: 2; }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -76,62 +122,79 @@
     }
 
     .site-id {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-weight: 900;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
+      font-family: 'Bangers', cursive;
+      font-size: 1rem;
+      letter-spacing: 0.16em;
       color: var(--dim);
     }
 
-    .site-id em { color: var(--accent); font-style: normal; }
+    .site-id em {
+      color: var(--fg);
+      font-style: normal;
+      text-shadow: 1px 1px 0 var(--dim);
+    }
 
     .theme-btn {
-      background: var(--panel);
-      border: 2px solid var(--border);
-      border-radius: 2px;
-      color: var(--dim);
+      background: var(--fg);
+      border: 2px solid var(--fg);
+      border-radius: 0;
+      color: var(--ink-dark);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       padding: 0.3rem 0.7rem;
       cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.06em;
+      transition: all 0.15s;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      font-weight: 700;
     }
 
     .theme-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 10px var(--shadow);
+      background: var(--ink-dark);
+      color: var(--fg);
+      transform: translate(-2px, -2px);
+      box-shadow: 3px 3px 0 var(--fg);
     }
 
+    /* Main profile card — thick manga panel */
     .card {
       background: var(--panel);
-      border: 2.5px solid var(--fg);
-      border-radius: 2px;
+      border: 3px solid var(--fg);
+      border-radius: 0;
       padding: 1.5rem;
       margin-bottom: 0.75rem;
       position: relative;
-      box-shadow: 4px 4px 0px var(--fg);
-      transition: box-shadow 0.2s, transform 0.2s;
+      box-shadow: 5px 5px 0px var(--fg);
+      transition: box-shadow 0.15s, transform 0.15s;
     }
 
     .card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--fg);
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0px var(--fg);
     }
 
+    /* Manga panel corner cuts */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 0 18px 18px 0;
+      border-color: transparent var(--bg) transparent transparent;
+    }
+
+    /* Chapter label */
     .card-tag {
       position: absolute;
       top: -1px;
-      right: 12px;
-      background: var(--accent);
-      color: #fff;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-weight: 700;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      padding: 0.15rem 0.5rem;
+      right: 24px;
+      background: var(--fg);
+      color: var(--ink-dark);
+      font-family: 'Bangers', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      padding: 0.15rem 0.6rem;
       border-radius: 0 0 3px 3px;
     }
 
@@ -146,127 +209,186 @@
       flex-shrink: 0;
     }
 
-    .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 2px;
-      border: 2.5px solid var(--fg);
-      display: block;
-    }
-
+    /* Screentone / halftone ring around avatar */
     .avatar-wrap::before {
       content: '';
       position: absolute;
       inset: -6px;
-      border-radius: 2px;
-      background: repeating-conic-gradient(var(--accent) 0deg 2deg, transparent 2deg 12deg);
-      opacity: 0.18;
+      border: 2px solid var(--fg);
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        var(--halftone) 2px,
+        var(--halftone) 4px
+      );
       z-index: -1;
     }
 
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 0;
+      border: 3px solid var(--fg);
+      display: block;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
     .profile-text h1 {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-weight: 900;
-      font-size: 1.4rem;
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
       color: var(--fg);
-      letter-spacing: 0.02em;
-      line-height: 1.1;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      text-shadow: 2px 2px 0 var(--dim);
     }
 
     .handle {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--dim);
-      margin-top: 0.3rem;
+      margin-top: 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
     }
 
     .handle a {
-      color: var(--accent2);
+      color: var(--fg);
       text-decoration: none;
-      border-bottom: 1px solid currentColor;
+      border-bottom: 2px solid var(--fg);
       padding-bottom: 1px;
-      transition: color 0.15s;
+      transition: all 0.15s;
+      font-weight: 500;
     }
 
-    .handle a:hover { color: var(--accent); }
+    .handle a:hover {
+      background: var(--fg);
+      color: var(--ink-dark);
+      padding: 0 3px 1px;
+    }
 
     .tags {
       display: flex;
       gap: 0.4rem;
-      margin-top: 0.6rem;
+      margin-top: 0.7rem;
       flex-wrap: wrap;
     }
 
     .tag {
-      font-size: 0.6rem;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      padding: 0.15rem 0.5rem;
-      border: 1.5px solid currentColor;
-      border-radius: 2px;
+      font-size: 0.58rem;
+      font-family: 'Bangers', cursive;
+      letter-spacing: 0.12em;
+      padding: 0.15rem 0.55rem;
+      border: 2px solid var(--fg);
+      border-radius: 0;
       text-transform: uppercase;
+      color: var(--fg);
+      transition: all 0.15s;
     }
 
-    .tag-pink  { color: var(--accent); }
-    .tag-cyan  { color: var(--accent2); }
-    .tag-yellow{ color: var(--accent3); }
+    /* Alternating fill styles like manga screen tones */
+    .tag:nth-child(1) {
+      background: var(--fg);
+      color: var(--ink-dark);
+    }
 
+    .tag:nth-child(2) {
+      background: transparent;
+    }
+
+    .tag:nth-child(3) {
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        var(--halftone) 2px,
+        var(--halftone) 4px
+      );
+    }
+
+    .tag:hover {
+      background: var(--fg);
+      color: var(--ink-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Speech bubble bio card */
     .bio-card {
       background: var(--panel);
-      border: 2.5px solid var(--fg);
-      border-radius: 2px;
+      border: 3px solid var(--fg);
+      border-radius: 0;
       padding: 1.25rem 1.5rem;
       margin-bottom: 0.75rem;
       position: relative;
-      box-shadow: 4px 4px 0px var(--fg);
-      transition: box-shadow 0.2s, transform 0.2s;
+      box-shadow: 5px 5px 0px var(--fg);
+      transition: box-shadow 0.15s, transform 0.15s;
     }
 
     .bio-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--fg);
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0px var(--fg);
     }
 
+    /* Manga speech bubble tail — squared off */
     .bio-card::after {
       content: '';
       position: absolute;
-      top: -10px;
-      left: 28px;
-      width: 0; height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 10px solid var(--fg);
+      top: -14px;
+      left: 24px;
+      width: 14px;
+      height: 14px;
+      background: var(--fg);
+      clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
     }
 
     .bio-card::before {
       content: '';
       position: absolute;
-      top: -6px;
-      left: 30px;
-      width: 0; height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 8px solid var(--panel);
+      top: -8px;
+      left: 27px;
+      width: 8px;
+      height: 9px;
+      background: var(--panel);
+      clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
       z-index: 1;
     }
 
-    .bio {
-      font-size: 0.82rem;
+    /* Sound effect style on bio card */
+    .sfx {
+      position: absolute;
+      top: -0.5rem;
+      right: 1rem;
+      font-family: 'Bangers', cursive;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
       color: var(--dim);
-      line-height: 1.85;
+      text-transform: uppercase;
     }
 
-    .bio strong { color: var(--fg); font-weight: 500; }
+    .bio {
+      font-size: 0.8rem;
+      color: var(--dim);
+      line-height: 1.9;
+    }
+
+    .bio strong { color: var(--fg); font-weight: 700; }
 
     .section-label {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-weight: 700;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
+      font-family: 'Bangers', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       padding-left: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
     .links {
@@ -283,67 +405,119 @@
       padding: 0.8rem 1rem;
       background: var(--panel);
       border: 2px solid var(--border);
-      border-radius: 2px;
+      border-radius: 0;
       text-decoration: none;
       color: var(--fg);
-      font-size: 0.82rem;
-      transition: all 0.18s;
+      font-size: 0.8rem;
+      transition: all 0.15s;
       position: relative;
       overflow: hidden;
+      font-family: 'IBM Plex Mono', monospace;
     }
 
+    /* Screentone fill on hover */
     .link::before {
       content: '';
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--accent);
-      transform: scaleY(0);
-      transition: transform 0.18s;
-      transform-origin: bottom;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 3px,
+        var(--halftone) 3px,
+        var(--halftone) 6px
+      );
+      opacity: 0;
+      transition: opacity 0.15s;
     }
 
     .link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 3px 3px 0 var(--accent);
-      transform: translate(-1px, -1px);
+      border-color: var(--fg);
+      box-shadow: 4px 4px 0 var(--fg);
+      transform: translate(-2px, -2px);
     }
 
-    .link:hover::before { transform: scaleY(1); }
+    .link:hover::before { opacity: 1; }
 
     .link-label {
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      position: relative;
+      z-index: 1;
     }
 
-    .link svg { opacity: 0.35; flex-shrink: 0; transition: opacity 0.18s; }
+    .link svg {
+      opacity: 0.4;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
     .link:hover svg { opacity: 1; }
 
-    .link-arrow {
+    /* Chapter number badge on links */
+    .link-num {
+      font-family: 'Bangers', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
       color: var(--dim);
-      font-size: 0.75rem;
-      transition: transform 0.18s, color 0.18s;
+      border: 1.5px solid var(--border);
+      padding: 0 0.35rem;
+      line-height: 1.6;
+      transition: all 0.15s;
+      position: relative;
+      z-index: 1;
     }
 
-    .link:hover .link-arrow {
-      transform: translate(2px, -2px);
-      color: var(--accent);
+    .link:hover .link-num {
+      background: var(--fg);
+      color: var(--ink-dark);
+      border-color: var(--fg);
     }
 
-    footer {
-      font-size: 0.65rem;
-      color: var(--dim);
-      text-align: center;
-      letter-spacing: 0.08em;
+    /* Bottom panel rule */
+    .manga-panel-bottom {
+      display: flex;
+      gap: 4px;
+      margin-top: 1rem;
     }
 
-    footer span { color: var(--accent); }
+    .manga-panel-bottom span {
+      height: 3px;
+      background: var(--fg);
+      flex: 1;
+    }
+
+    .manga-panel-bottom span:nth-child(1) { flex: 2; opacity: 0.5; }
+    .manga-panel-bottom span:nth-child(3) { flex: 3; opacity: 0.7; }
+    .manga-panel-bottom span:nth-child(5) { opacity: 0.3; }
+
+    /* Entry animation — manga panel reveal */
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translate(6px, 6px);
+        clip-path: inset(0 100% 0 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate(0, 0);
+        clip-path: inset(0 0% 0 0);
+      }
+    }
+
+    .card        { animation: panel-in 0.35s ease-out both; animation-delay: 0.05s; }
+    .bio-card    { animation: panel-in 0.35s ease-out both; animation-delay: 0.15s; }
+    .link:nth-child(1) { animation: panel-in 0.3s ease-out both; animation-delay: 0.25s; }
+    .link:nth-child(2) { animation: panel-in 0.3s ease-out both; animation-delay: 0.32s; }
+    .link:nth-child(3) { animation: panel-in 0.3s ease-out both; animation-delay: 0.39s; }
   </style>
 </head>
 <body>
   <main>
+
+    <div class="manga-panel-top">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
 
     <div class="top-bar">
       <p class="site-id">~ <em>ren.familyguy</em></p>
@@ -351,6 +525,7 @@
     </div>
 
     <div class="card">
+      <div class="card-tag">PROFILE</div>
       <div class="profile">
         <div class="avatar-wrap">
           <img class="avatar" src="https://github.com/renfamilyguy.png" alt="Ovi Ren" loading="lazy">
@@ -359,15 +534,16 @@
           <h1>Ovi Ren</h1>
           <p class="handle">aka <a href="https://github.com/iamovi" target="_blank" rel="noopener">@iamovi</a></p>
           <div class="tags">
-            <span class="tag tag-pink">dev</span>
-            <span class="tag tag-cyan">builder</span>
-            <span class="tag tag-yellow">chaos</span>
+            <span class="tag">dev</span>
+            <span class="tag">builder</span>
+            <span class="tag">chaos</span>
           </div>
         </div>
       </div>
     </div>
 
     <div class="bio-card">
+      <span class="sfx">— inner monologue —</span>
       <p class="bio">
         Experiments, side projects, and bad ideas. I break things,
         fix them <strong>(sometimes)</strong>, and see what happens.
@@ -375,7 +551,7 @@
       </p>
     </div>
 
-    <p class="section-label">— links —</p>
+    <p class="section-label">LINKS</p>
     <nav class="links">
       <a class="link" href="https://github.com/iamovi" target="_blank" rel="noopener">
         <span class="link-label">
@@ -384,7 +560,7 @@
           </svg>
           main account
         </span>
-        <span class="link-arrow">↗</span>
+        <span class="link-num">01 ↗</span>
       </a>
 
       <a class="link" href="https://github.com/renfamilyguy" target="_blank" rel="noopener">
@@ -394,22 +570,24 @@
           </svg>
           playground
         </span>
-        <span class="link-arrow">↗</span>
+        <span class="link-num">02 ↗</span>
       </a>
 
       <a class="link" href="https://iamovi.github.io" target="_blank" rel="noopener">
         <span class="link-label">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.42-3.58-8-8-8z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
             <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
           </svg>
           portfolio
         </span>
-        <span class="link-arrow">↗</span>
+        <span class="link-num">03 ↗</span>
       </a>
     </nav>
 
-
+    <div class="manga-panel-bottom">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
 
   </main>
 
